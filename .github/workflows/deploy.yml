@@ -1,0 +1,81 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Never cancel a deploy half-way through.
+  cancel-in-progress: false
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  # Build the image once, scan it, and push it only if the scan passes. Tags: the commit SHA (what
+  # gets deployed) and latest. Off until the repo variable DEPLOY_ENABLED is 'true' (README, "Going live").
+  image:
+    name: image (web)
+    if: vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    environment: prod # holds REGISTRY_CI_PASSWORD
+    env:
+      IMAGE: registry.gabrieldiem.com/gabrieldiem-com-web
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: Build Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: apps/web
+          load: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+      - name: Install Trivy
+        env:
+          TRIVY_VERSION: "0.76.1"
+          TRIVY_SHA256: "c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0"
+        run: |
+          curl -sSLo "$RUNNER_TEMP/trivy.tar.gz" "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+          echo "${TRIVY_SHA256}  $RUNNER_TEMP/trivy.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/trivy.tar.gz" -C /usr/local/bin trivy
+      - name: Scan image for vulnerabilities
+        run: |
+          trivy image --download-db-only
+          trivy image --ignorefile .trivyignore.yaml --format table --exit-code 0 --severity HIGH --scanners vuln,misconfig,license --skip-db-update "${IMAGE}:${GITHUB_SHA}"
+          trivy image --ignorefile .trivyignore.yaml --format table --exit-code 1 --severity CRITICAL --scanners vuln,misconfig,license --skip-db-update --quiet "${IMAGE}:${GITHUB_SHA}"
+      - name: Log in to registry.gabrieldiem.com
+        uses: docker/login-action@v4
+        with:
+          registry: registry.gabrieldiem.com
+          username: ci
+          password: ${{ secrets.REGISTRY_CI_PASSWORD }}
+      - name: Push
+        run: |
+          docker push "${IMAGE}:${GITHUB_SHA}"
+          docker push "${IMAGE}:latest"
+
+  # Point the Portainer stack at the new image and wait until it is live: the job is green only when
+  # the container runs this commit, is healthy, and the public page answers.
+  deploy:
+    needs: [test, image]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: prod
+      url: https://gabrieldiem.com
+    steps:
+      - uses: actions/checkout@v7
+      - name: Deploy via Portainer
+        env:
+          PORTAINER_URL: ${{ vars.PORTAINER_URL }}
+          PORTAINER_STACK_ID: ${{ vars.PORTAINER_STACK_ID }}
+          PORTAINER_ENDPOINT_ID: ${{ vars.PORTAINER_ENDPOINT_ID }}
+          PORTAINER_API_KEY: ${{ secrets.PORTAINER_API_KEY }}
+        run: deploy/portainer-deploy.sh "${GITHUB_SHA}"
