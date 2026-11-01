@@ -1,0 +1,56 @@
+.blackout {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  background: #020403;
+  color: var(--phos);
+  text-align: center;
+  padding: 20px;
+}
+.blackout.strike {
+  opacity: 0.2;
+}
+.boCopy {
+  grid-row: 2;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-shadow: 0 0 14px rgba(185, 246, 196, 0.55);
+}
+.boCopy h2 {
+  font-size: clamp(1.8rem, 5vw, 3.4rem);
+}
+.boCopy p {
+  max-width: 30em;
+}
+.knife {
+  display: block;
+  width: 158px;
+  height: 196px;
+  margin: 4px 0 -6px;
+  filter: drop-shadow(0 0 9px rgba(185, 246, 196, 0.55));
+}
+.knifeArm {
+  transform-origin: 79px 160px;
+  transform: rotate(-33deg);
+  transition: transform 0.32s cubic-bezier(0.5, 0, 0.9, 0.6);
+}
+.knifeBtn:hover .knifeArm {
+  transform: rotate(-28deg);
+}
+.knifeBtn.thrown .knifeArm {
+  transform: rotate(0deg);
+}
+.knifeBtn {
+  border-radius: 12px;
+}
+.knifeBtn :global(.eng) {
+  display: block;
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: var(--phos);
+}
