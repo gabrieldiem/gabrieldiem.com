@@ -1,0 +1,91 @@
+.orders {
+  padding: clamp(40px, 7vw, 104px) clamp(14px, 4vw, 60px);
+}
+.ordersWrap {
+  max-width: 1240px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+  gap: clamp(24px, 5vw, 84px);
+  align-items: start;
+}
+.ordersLead p {
+  margin-top: 18px;
+  max-width: 28em;
+}
+.ordersLead :global(.hand) {
+  display: block;
+  margin-top: 30px;
+  transform: rotate(-1.6deg);
+  max-width: 15em;
+  font-size: 1.85rem;
+}
+.sheet {
+  position: relative;
+  padding: clamp(24px, 4vw, 52px);
+  background-color: #f6f6ec;
+  box-shadow:
+    1px 2px 2px rgba(0, 0, 0, 0.25),
+    7px 16px 26px rgba(20, 40, 30, 0.35);
+  transform: rotate(0.35deg);
+}
+.sheet::before,
+.sheet::after {
+  /* masking tape */
+  content: '';
+  position: absolute;
+  top: -13px;
+  width: 112px;
+  height: 28px;
+  background: rgba(226, 212, 160, 0.82);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.sheet::before {
+  left: 7%;
+  transform: rotate(-4deg);
+}
+.sheet::after {
+  right: 9%;
+  transform: rotate(3deg);
+}
+.sheet h3 {
+  font: 800 1.35rem/1.25 var(--manual);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--ink);
+}
+.sheet ol {
+  counter-reset: o;
+}
+.sheet li {
+  counter-increment: o;
+  display: grid;
+  grid-template-columns: 2.1rem 1fr;
+  padding-block: 11px;
+}
+.sheet li::before {
+  content: counter(o) '.';
+  font: 800 1.15rem/1.4 var(--manual);
+}
+.sheet strong {
+  display: block;
+  font: 800 1.15rem/1.4 var(--manual);
+}
+.sheet li span {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+.sign {
+  margin-top: 18px;
+  font: 400 2.6rem/1 var(--hand);
+  color: var(--ballpoint);
+  transform: rotate(-3deg);
+  transform-origin: 0 50%;
+}
+@media (max-width: 899px) {
+  .ordersWrap {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

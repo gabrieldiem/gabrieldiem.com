@@ -1,0 +1,21 @@
+# gabrieldiem.com (prod): web (nginx serving the React build).
+#
+#   make prod → http://localhost:8082
+
+name: gabrieldiem-com
+
+services:
+  web:
+    container_name: gabrieldiem-com-web
+    image: gabrieldiem-com-web
+    build:
+      context: ./apps/web
+    restart: unless-stopped
+    ports:
+      - "${WEB_HOST_PORT:-8082}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s

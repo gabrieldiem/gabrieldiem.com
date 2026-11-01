@@ -1,0 +1,20 @@
+# gabrieldiem.com in production: the Portainer stack "gabrieldiem-com".
+#
+# CI builds the image and pushes it to registry.gabrieldiem.com tagged with the commit SHA, then
+# deploy/portainer-deploy.sh sends this file to Portainer with IMAGE_TAG=<sha>. Caddy on the edge
+# serves https://gabrieldiem.com and forwards to the web container (127.0.0.1:8091).
+name: gabrieldiem-com
+
+services:
+  web:
+    image: registry.gabrieldiem.com/gabrieldiem-com-web:${IMAGE_TAG:?set IMAGE_TAG (a commit SHA) in Portainer}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8091:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    mem_limit: 64m

@@ -1,0 +1,40 @@
+.phone {
+  background: var(--noise), linear-gradient(180deg, #1d110a, #120a06);
+  color: #efe9d6;
+  padding: clamp(46px, 8vw, 110px) clamp(16px, 4vw, 60px) 42px;
+}
+.phoneWrap {
+  position: relative;
+  max-width: 1320px;
+  margin-inline: auto;
+}
+.phone h2 {
+  max-width: 13em;
+}
+.lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px clamp(28px, 5vw, 72px);
+  margin-top: 30px;
+}
+.lines a {
+  display: block;
+  padding-block: 14px;
+  font: 600 clamp(1.15rem, 2.2vw, 1.45rem)/1.25 var(--manual);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--g1);
+  overflow-wrap: anywhere;
+}
+.lines li {
+  max-width: 100%;
+}
+.lines a:hover {
+  color: var(--g1);
+}
+.small {
+  margin-top: 44px;
+  max-width: 46em;
+  font-size: 0.94rem;
+  color: #bcb39c;
+}

@@ -1,0 +1,201 @@
+.recorder {
+  position: relative;
+  background-color: var(--hammer);
+  background-image: var(--noise), radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.8px);
+  background-size:
+    auto,
+    5px 5px;
+  padding: clamp(36px, 6vw, 88px) clamp(0px, 3vw, 44px) 0;
+  color: #eef0e2;
+}
+.recorderHead {
+  max-width: 980px;
+  margin: 0 auto clamp(20px, 3vw, 36px);
+  padding-inline: 20px;
+}
+.recorderHead p {
+  margin-top: 12px;
+  max-width: 42em;
+}
+.roller {
+  position: relative;
+  z-index: 2;
+  height: 30px;
+  max-width: 1024px;
+  margin-inline: auto;
+  background: linear-gradient(180deg, #1a1a17, #6d7168 30%, #a6aa9d 42%, #4b4f47 72%, #141412);
+  border-radius: 8px;
+  box-shadow: 0 7px 11px rgba(0, 0, 0, 0.5);
+}
+.roller.low {
+  margin-top: -6px;
+  height: 42px;
+  box-shadow:
+    0 -7px 11px rgba(0, 0, 0, 0.35),
+    0 6px 11px rgba(0, 0, 0, 0.4);
+}
+.paper {
+  --lane: clamp(84px, 30%, 300px);
+  --holes: 24px;
+  position: relative;
+  max-width: 980px;
+  margin-inline: auto;
+  padding: 46px calc(var(--holes) + 8px) 72px;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 50% 12px, var(--hammer) 4.5px, transparent 5px),
+    radial-gradient(circle at 50% 12px, var(--hammer) 4.5px, transparent 5px),
+    linear-gradient(90deg, rgba(227, 167, 155, 0.38) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(227, 167, 155, 0.5) 1px, transparent 1px);
+  background-size:
+    var(--holes) 24px,
+    var(--holes) 24px,
+    10% 100%,
+    100% 24px;
+  background-position:
+    0 0,
+    100% 0,
+    0 0,
+    0 0;
+  background-repeat: repeat-y, repeat-y, repeat, repeat;
+  box-shadow: 0 0 22px rgba(0, 0, 0, 0.45);
+}
+.trace {
+  position: absolute;
+  top: 0;
+  left: var(--holes);
+  pointer-events: none;
+  overflow: visible;
+}
+.axis {
+  position: absolute;
+  top: 12px;
+  left: var(--holes);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.axis :global(.hand) {
+  font-size: 1.5rem;
+}
+.carriage {
+  position: sticky;
+  top: 62svh;
+  height: 0;
+  z-index: 3;
+  margin-left: -8px;
+  left: 0;
+  pointer-events: none;
+}
+.rail {
+  position: absolute;
+  left: 0;
+  top: -2px;
+  height: 4px;
+  background: linear-gradient(180deg, #e6dfb9, #76704f);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+}
+.pen {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  width: 30px;
+  height: 34px;
+  margin-left: -15px;
+  will-change: transform;
+}
+.entries {
+  position: relative;
+  margin-left: var(--lane);
+  padding-left: clamp(10px, 3%, 36px);
+}
+.entries li {
+  padding-bottom: 72px;
+  position: relative;
+}
+.entries li:last-child {
+  padding-bottom: 8px;
+}
+.entries time {
+  display: block;
+  font: 700 0.78rem/24px var(--plate);
+  letter-spacing: 0.04em;
+  color: var(--pen);
+}
+.entries h3 {
+  font: 800 clamp(1.25rem, 2.6vw, 1.7rem)/1.17 var(--manual);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  margin-bottom: 8px;
+}
+.entries p {
+  font-size: 1.03rem;
+  line-height: 24px;
+  max-width: 34em;
+}
+.entries p + p {
+  margin-top: 12px;
+}
+.entries :global(.hand) + p {
+  margin-top: 16px;
+}
+.entries :global(.hand) {
+  display: block;
+  margin-top: 12px;
+  transform: rotate(-1.4deg);
+  transform-origin: 0 50%;
+  max-width: 20em;
+}
+.stamp {
+  position: absolute;
+  z-index: 2;
+  top: 54px;
+  right: 6%;
+  padding: 5px 9px;
+  border: 2.5px solid #6a2d9e;
+  color: #6a2d9e;
+  font: 700 0.8rem/1 var(--plate);
+  letter-spacing: 0.05em;
+  transform: rotate(4deg);
+  opacity: 0.78;
+  border-radius: 3px;
+  background: rgba(237, 240, 223, 0.6);
+}
+@media (max-width: 640px) {
+  .paper {
+    --lane: 76px;
+    --holes: 14px;
+    padding-inline: calc(var(--holes) + 2px) calc(var(--holes) + 6px);
+    background-size:
+      14px 24px,
+      14px 24px,
+      10% 100%,
+      100% 24px;
+  }
+  .paper {
+    background-image:
+      radial-gradient(circle at 50% 12px, var(--hammer) 3px, transparent 3.4px),
+      radial-gradient(circle at 50% 12px, var(--hammer) 3px, transparent 3.4px),
+      linear-gradient(90deg, rgba(227, 167, 155, 0.38) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(227, 167, 155, 0.5) 1px, transparent 1px);
+  }
+  .stamp {
+    position: static;
+    display: inline-block;
+    margin: 0 0 22px var(--lane);
+  }
+  .axis :global(.hand) {
+    font-size: 1.15rem;
+    white-space: nowrap;
+  }
+  .axisThe {
+    display: none;
+  }
+  .entries li {
+    padding-bottom: 56px;
+  }
+  .entries p {
+    font-size: 1rem;
+  }
+}

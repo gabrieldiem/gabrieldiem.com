@@ -1,0 +1,106 @@
+.name {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.name .casing {
+  fill: none;
+  stroke: var(--bake);
+  stroke-width: 0.72;
+  stroke-linejoin: miter;
+}
+.name .inner {
+  fill: none;
+  stroke: var(--c, var(--dead));
+  stroke-width: 0.34;
+  stroke-linejoin: miter;
+  transition: stroke 0.09s linear;
+}
+.name .flow {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 0.13;
+  stroke-dasharray: 0.12 1.5;
+  animation: flow 1s linear infinite;
+}
+.name .big.casing {
+  stroke-width: 0.5;
+}
+.name .big.inner {
+  stroke-width: 0.235;
+}
+.name .big.flow {
+  stroke-width: 0.07;
+  stroke-dasharray: 0.065 0.8107;
+  animation-name: flowbig;
+}
+.name .mark {
+  fill: var(--bake);
+}
+.name .pip {
+  fill: var(--c, var(--dead));
+  transition: fill 0.09s linear;
+}
+.name [data-owner='1'] {
+  --c: var(--g1);
+}
+.name [data-owner='2'] {
+  --c: var(--g2);
+}
+.name [data-owner='3'] {
+  --c: var(--g3);
+}
+.name [data-owner='0'] {
+  --c: var(--dead);
+}
+.name [data-owner='0'] .flow {
+  display: none;
+}
+.name [data-owner='0'] .inner {
+  animation: dying 0.3s steps(2) 2;
+}
+@keyframes flow {
+  to {
+    stroke-dashoffset: -1.62;
+  }
+}
+@keyframes flowbig {
+  to {
+    stroke-dashoffset: -0.8757;
+  }
+}
+@keyframes dying {
+  50% {
+    stroke: #e9e4c9;
+  }
+}
+
+.ghostWrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(92vw, 1180px);
+  transform: translate(-50%, -50%);
+  opacity: 0.13;
+  pointer-events: none;
+}
+.ghostSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ghostCasing {
+  fill: none;
+  stroke: var(--phos);
+  stroke-width: 0.6;
+}
+.ghostMark {
+  fill: var(--phos);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .name .flow {
+    display: none;
+  }
+}
