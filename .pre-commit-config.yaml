@@ -1,0 +1,24 @@
+# Pre-commit hooks. `make install` registers them; `make precommit` runs them on every file.
+repos:
+  - repo: local
+    hooks:
+      - id: eslint
+        name: "Linter (ESLint)"
+        entry: bash -c 'cd apps/web && npx eslint . --max-warnings 0'
+        language: system
+        files: ^apps/web/.*\.(ts|tsx|js)$
+        pass_filenames: false
+
+      - id: prettier
+        name: "Formatter (Prettier)"
+        entry: bash -c 'cd apps/web && npx prettier --check .'
+        language: system
+        files: ^apps/web/
+        pass_filenames: false
+
+      - id: tsc
+        name: "Type Checker (tsc)"
+        entry: bash -c 'cd apps/web && npx tsc --noEmit'
+        language: system
+        files: ^apps/web/.*\.(ts|tsx)$
+        pass_filenames: false

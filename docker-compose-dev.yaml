@@ -1,0 +1,22 @@
+# gabrieldiem.com (dev): web (Vite dev server)
+#
+#   make up → http://localhost:5174
+
+name: gabrieldiem-com-dev
+
+services:
+  web:
+    container_name: gabrieldiem-com-web-dev
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "${WEB_DEV_PORT:-5174}:5174"
+    environment:
+      # Bind mounts on some hosts (WSL, NTFS, Docker Desktop) don't deliver inotify events.
+      VITE_USE_POLLING: "true"
+    volumes:
+      - ./apps/web:/app
+      # Keep the image's node_modules (built for Linux) instead of the host's.
+      - /app/node_modules
