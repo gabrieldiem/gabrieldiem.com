@@ -4,9 +4,8 @@ One line per item. Sections: **Decide** needs Gabriel's answer, **Later** is pla
 
 ## Decide
 
-- [ ] **Confirm the AI opinions** (product, S): "I like AI the way I like any machine", the seven standing orders and "Yes, I see the irony" were drafted from his resume, not said by him. Done when he has approved or rewritten them. _Added 2026-11-01_
+- [ ] **Confirm the AI opinions** (product, S): "I like AI the way I like any machine", the seven standing orders and "Yes, I see the irony" were drafted from his resume, not said by him. He cut "Demos don't tell me much." on 2026-11-02, and "tells me what I need to know" replaced the sentence that answered it. Done when he has approved or rewritten them. _Added 2026-11-01_
 - [ ] **Confirm the 2024 to 2025 gap** (product, S): "A year of coursework at UBA" is inferred from repos tagged 1Q2025. Done when confirmed or corrected. _Added 2026-11-01_
-- [ ] **Confirm MapaSMN** (product, S): the plate assumes it's his university project for Argentina's weather service, and that it's fine to show publicly. _Added 2026-11-01_
 - [ ] **Confirm the judge caveat** (product, S): the page says the bench's judge is an OpenAI model, from the README's default. Check it was the judge for the published chart, and that he wants this said. _Added 2026-11-01_
 - [ ] **Confirm three timeline lines** (product, S): "where I still coach capstone teams", "first job on the roll", and "leader elections first, replicated agents after", which hints the coursework led to the agents. _Added 2026-11-01_
 - [ ] **Where the site is hosted** (infra, S): `gabrieldiem.com` points at 167.114.68.52, which wasn't answering on 2026-11-01. The deploy is built for the Portainer edge that runs GYMBROS and stays off until he chooses. _Added 2026-11-01_
@@ -26,3 +25,5 @@ One line per item. Sections: **Decide** needs Gabriel's answer, **Later** is pla
 - [ ] **Axe can't judge contrast on textured panels** (web, S): it reports text over the noise backgrounds as "needs review", not as a pass. Check those pairs by hand or with a contrast script. `tests/e2e/a11y.spec.ts`. _Added 2026-11-01_
 
 ## Done
+
+- [x] **Confirm MapaSMN**: closed 2026-11-02. He worked directly with SMN people to build it for them and modernize alert generation, so it's shown publicly on a black plate.

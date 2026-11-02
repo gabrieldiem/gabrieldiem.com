@@ -11,8 +11,8 @@ export function Orders() {
         <div className={styles.ordersLead}>
           <h2 id="orders-title">I like AI the way I like any machine</h2>
           <p>
-            I want to open it up, watch it run, break it on purpose and see if it comes back. Demos
-            don&apos;t tell me much. A long-running session on its third replica does.
+            I want to open it up, watch it run, break it on purpose and see if it comes back. A
+            long-running session on its third replica tells me what I need to know.
           </p>
           <span className="hand">
             I grade student code too, and I research how to spot when a model wrote it. Yes, I see

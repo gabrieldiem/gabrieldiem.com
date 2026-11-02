@@ -29,9 +29,9 @@ export const PLATES: Plate[] = [
   {
     name: 'MapaSMN',
     description:
-      "GOES-19 satellite imagery, lightning and weather radar on one map, for Argentina's national weather service.",
+      "Built with the people at SMN, Argentina's national weather service, to modernize how they generate alerts. Satellite, lightning and radar on one map.",
     href: 'https://github.com/fiuba-tp-g153-smn/mapasmn',
-    school: true,
+    school: false,
     width: 430,
   },
   {
