@@ -34,14 +34,25 @@ make e2e                # Playwright against the running stack: flows, layout, a
 make precommit          # eslint, prettier, tsc
 ```
 
-## Going live
+## Deploying
 
-Pushing to `master` always runs the tests. Building and deploying stay off until the steps below are done, so merging can't break anything or go red on missing secrets.
+A push to `master` runs the tests, builds the image, scans it with Trivy and pushes it to `registry.gabrieldiem.com`. Then it starts the production stack file with that image and checks it, before production is touched. Finally it updates the Portainer stack, waits for a healthy container on that commit and checks https://gabrieldiem.com. A failed deploy keeps the site up: if the container was already replaced, the script restores the previous version. `redeploy.yml` deploys an existing tag by hand for a rollback.
 
-1. **Create the stack.** In Portainer, add a stack named `gabrieldiem-com` from `deploy/compose.edge.yaml`, with `IMAGE_TAG` as an environment variable. Note its stack and endpoint IDs.
-2. **Point Caddy at it.** On the edge, add a site for `gabrieldiem.com` and `www.gabrieldiem.com` that forwards to `127.0.0.1:8091`. Check that port is free.
-3. **Move DNS.** Point `gabrieldiem.com` and `www` at the edge. `postit.gabrieldiem.com` has its own record and stays where it is.
-4. **Configure GitHub.** In the repo's `prod` environment, add the secrets `REGISTRY_CI_PASSWORD` and `PORTAINER_API_KEY`, and the variables `PORTAINER_URL`, `PORTAINER_STACK_ID` and `PORTAINER_ENDPOINT_ID`.
-5. **Turn it on.** Add the repository variable `DEPLOY_ENABLED=true`, then push to `master` or run **Actions → Deploy**.
+### First deploy
 
-After that, a push to `master` runs the tests, builds the image, scans it with Trivy, pushes it to the registry, updates the stack, waits for a healthy container and checks the live page. If the check fails, the script restores the previous tag. `redeploy.yml` deploys an existing tag by hand for a rollback.
+Run this once, from the repo root, on the branch you're about to merge:
+
+```bash
+deploy/first-deploy-wizard.sh
+```
+
+It walks through the steps that need your credentials, and it's safe to run again:
+
+1. Takes a Portainer access token for the `ci` user and the registry password.
+2. Creates the GitHub `prod` environment and stores the secrets and variables.
+3. Builds and pushes the first image, because a stack needs an image that already exists.
+4. Creates the `gabrieldiem-com` stack in Portainer.
+5. Adds the site to Caddy on the edge over SSH (`awsbr_edge_gabriel`), asking for your sudo password. It keeps a backup, validates the file and restores it if validation fails.
+6. Checks the live site.
+
+Merge after that, and every later deploy is automatic. Until the wizard has run, a push to `master` goes red at the registry login, and production isn't touched.
