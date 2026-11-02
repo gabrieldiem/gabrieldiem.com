@@ -1,4 +1,4 @@
-# gabrieldiem.com in production: the Portainer stack "gabrieldiem-com".
+# gabrieldiem.com in production: the Portainer stack "gabrieldiem-com" on gd-edge-br (São Paulo).
 #
 # CI builds the image and pushes it to registry.gabrieldiem.com tagged with the commit SHA, then
 # deploy/portainer-deploy.sh sends this file to Portainer with IMAGE_TAG=<sha>. Caddy on the edge
