@@ -23,7 +23,7 @@ Run what matches the change, and run everything before calling a phase done:
 |---|---|
 | logic or content | `make test` + `cd apps/web && npm run lint` |
 | any UI | the above + `make e2e` + screenshots (below), and actually look at them |
-| Dockerfile, nginx or deploy files | `make prod`, then `E2E_BASE_URL=http://localhost:8082 make e2e` |
+| Dockerfile, nginx or deploy files | `make test`, `make prod`, then `E2E_BASE_URL=http://localhost:8082 make e2e` |
 | before calling a phase done | `make precommit` + `npm run build` + `E2E_BASE_URL=http://localhost:8082 make e2e` |
 
 `make e2e` needs a running stack. Done means green, with no skipped spec you didn't expect and every screenshot looked at.

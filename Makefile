@@ -1,7 +1,7 @@
 # Makefile for gabrieldiem.com (apps/web)
 
 # Declare phony targets to avoid conflicts with files of the same name
-.PHONY: install up down prod local test test-web e2e precommit clean
+.PHONY: install up down prod local test test-web test-deploy e2e precommit clean
 
 DEV := docker compose -f docker-compose-dev.yaml
 PROD := docker compose -f docker-compose.yaml
@@ -28,10 +28,14 @@ down:
 	$(PROD) down
 	$(DEV) down --remove-orphans
 
-test: test-web
+test: test-web test-deploy
 
 test-web:
 	cd apps/web && npm run test
+
+# Deploy and rollback behaviour against a fake Portainer.
+test-deploy:
+	python3 deploy/test_portainer_deploy.py
 
 # Playwright against the running dev stack (`make up` in another terminal).
 # E2E_BASE_URL=http://localhost:8082 runs it against the nginx build from `make prod`.

@@ -22,7 +22,7 @@ jobs:
       url: https://gabrieldiem.com
     steps:
       - uses: actions/checkout@v7
-      - name: Deploy via Portainer
+      - name: Deploy to gd-edge-br via Portainer
         env:
           IMAGE_TAG: ${{ inputs.image_tag }} # via env, never inlined into the script
           PORTAINER_URL: ${{ vars.PORTAINER_URL }}

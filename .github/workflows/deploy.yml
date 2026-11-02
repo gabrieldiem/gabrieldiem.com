@@ -16,10 +16,9 @@ jobs:
     uses: ./.github/workflows/test.yml
 
   # Build the image once, scan it, and push it only if the scan passes. Tags: the commit SHA (what
-  # gets deployed) and latest. Off until the repo variable DEPLOY_ENABLED is 'true' (README, "Going live").
+  # gets deployed) and latest.
   image:
     name: image (web)
-    if: vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-24.04
     environment: prod # holds REGISTRY_CI_PASSWORD
     env:
@@ -61,10 +60,28 @@ jobs:
           docker push "${IMAGE}:${GITHUB_SHA}"
           docker push "${IMAGE}:latest"
 
-  # Point the Portainer stack at the new image and wait until it is live: the job is green only when
-  # the container runs this commit, is healthy, and the public page answers.
+  # Start the real production stack file with this image and check it, before production is touched.
+  # A red job here means the running version was never affected.
+  smoke:
+    needs: image
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: prod # holds REGISTRY_CI_PASSWORD
+    steps:
+      - uses: actions/checkout@v7
+      - name: Log in to registry.gabrieldiem.com
+        uses: docker/login-action@v4
+        with:
+          registry: registry.gabrieldiem.com
+          username: ci
+          password: ${{ secrets.REGISTRY_CI_PASSWORD }}
+      - name: Start the stack and check it
+        run: deploy/smoke-test.sh "${GITHUB_SHA}"
+
+  # Point the Portainer stack on gd-edge-br at the new image and wait until it is live: the job is
+  # green only when the container runs this commit, is healthy, and the public page answers.
   deploy:
-    needs: [test, image]
+    needs: [test, image, smoke]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment:
@@ -72,7 +89,7 @@ jobs:
       url: https://gabrieldiem.com
     steps:
       - uses: actions/checkout@v7
-      - name: Deploy via Portainer
+      - name: Deploy to gd-edge-br via Portainer
         env:
           PORTAINER_URL: ${{ vars.PORTAINER_URL }}
           PORTAINER_STACK_ID: ${{ vars.PORTAINER_STACK_ID }}

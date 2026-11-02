@@ -8,11 +8,10 @@ One line per item. Sections: **Decide** needs Gabriel's answer, **Later** is pla
 - [ ] **Confirm the 2024 to 2025 gap** (product, S): "A year of coursework at UBA" is inferred from repos tagged 1Q2025. Done when confirmed or corrected. _Added 2026-11-01_
 - [ ] **Confirm the judge caveat** (product, S): the page says the bench's judge is an OpenAI model, from the README's default. Check it was the judge for the published chart, and that he wants this said. _Added 2026-11-01_
 - [ ] **Confirm three timeline lines** (product, S): "where I still coach capstone teams", "first job on the roll", and "leader elections first, replicated agents after", which hints the coursework led to the agents. _Added 2026-11-01_
-- [ ] **Where the site is hosted** (infra, S): `gabrieldiem.com` points at 167.114.68.52, which wasn't answering on 2026-11-01. The deploy is built for the Portainer edge that runs GYMBROS and stays off until he chooses. _Added 2026-11-01_
 
 ## Later
 
-- [ ] **Go live** (infra, M): the steps in the README's "Going live" section. Done when `DEPLOY_ENABLED` is on and a master push reaches https://gabrieldiem.com. _Added 2026-11-01_
+- [ ] **Go live** (infra, S): run `deploy/first-deploy-wizard.sh`, then merge. Done when a push to master reaches https://gabrieldiem.com. _Added 2026-11-01_
 - [ ] **Spanish version** (web, L): a rotary EN/ES switch on the board. GYMBROS has the pattern (`en.ts`, `es.ts`, `t()`), and `src/content/` keeps the copy ready to move. _Added 2026-11-01_
 - [ ] **Prerender the page** (web, M): crawlers and no-JS visitors only get the noscript summary. Render the content into `index.html` at build time. _Added 2026-11-01_
 - [ ] **Link preview image** (web, S): add `og:image`, a shot of the lit name on the panel. _Added 2026-11-01_
@@ -27,3 +26,4 @@ One line per item. Sections: **Decide** needs Gabriel's answer, **Later** is pla
 ## Done
 
 - [x] **Confirm MapaSMN**: closed 2026-11-02. He worked directly with SMN people to build it for them and modernize alert generation, so it's shown publicly on a black plate.
+- [x] **Where the site is hosted**: closed 2026-11-02. The Portainer stack on gd-edge-br, the same box as GYMBROS.
