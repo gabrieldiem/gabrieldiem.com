@@ -56,6 +56,9 @@ script=$(curl -s --max-time 10 "$BASE/" | grep -oE '/assets/index-[^"]+\.js' | h
   exit 1
 }
 check "script is served" '^200' -o /dev/null -w '%{http_code}' "$BASE$script"
+# Caddy adds a Via header, and nginx doesn't compress requests with one unless told to.
+check "script is compressed behind Caddy" '^content-encoding: gzip' -D - -o /dev/null \
+  -H 'Accept-Encoding: gzip' -H 'Via: 1.1 Caddy' "$BASE$script"
 check "script caches for a year" '^cache-control: public, max-age=31536000, immutable' -D - -o /dev/null "$BASE$script"
 
 echo "✅ ${IMAGE_TAG} passed"
