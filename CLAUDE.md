@@ -74,7 +74,7 @@ www.gabrieldiem.com/
 
 ## Architecture
 
-- **One static page.** No backend, no router, no database. `web` (nginx, port 80, published on 8082 by `make prod`) serves the build. nginx caches `/assets/*` (hashed) for a year and serves everything else with `no-cache`; unknown paths fall back to `index.html`. `/🐻.html` is a separate static page, kept from the first version of the site.
+- **One static page.** No backend, no router, no database. `web` (nginx, port 80, published on 8082 by `make prod`) serves the build. nginx gzips its responses, including behind Caddy (`gzip_proxied any`), caches `/assets/*` (hashed) for a year and serves everything else with `no-cache`; unknown paths fall back to `index.html`. `/🐻.html` is a separate static page, kept from the first version of the site.
 - **The plant** (`features/plant/plant.ts`) is the simulated cluster: a framework-free class holding replicas, section owners, the blackout and black start sequence, the log, the on-site clock and the links to other windows. It has its timers, sound, storage and channel injected, so it runs under fake timers. React reads it through `useSyncExternalStore` (`usePlantState`) and calls its methods. `services.ts` wires the real browser APIs and `PlantRoot` starts it.
 - **Failover rules** are pure functions in `plant.ts`: `preferredOwner` (a section's own replica, then its neighbour), `tieOwner`, `servingReplica`.
 - **What's real and what's simulated.** The replicas are simulated, and the footer says so. Two things are real: the checkpoint (`checkpoint.ts`, `localStorage`), which brings the session back after a reload, and other windows, which join over `BroadcastChannel`, share breakers and blackouts, and count as failed when they close or stop sending heartbeats.
