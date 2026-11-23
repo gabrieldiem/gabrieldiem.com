@@ -59,7 +59,7 @@ www.gabrieldiem.com/
 └── apps/
     └── web/                     # React + TypeScript + Vite; built static, served by nginx
         ├── CLAUDE.md
-        ├── Dockerfile           # node build stage → nginx:alpine runtime
+        ├── Dockerfile           # node:26-alpine build → nginx:mainline-alpine-slim, one worker
         ├── Dockerfile.dev       # vite dev server
         ├── nginx.conf           # SPA fallback, cache headers
         ├── public/              # favicon, the 🐻 easter egg page
