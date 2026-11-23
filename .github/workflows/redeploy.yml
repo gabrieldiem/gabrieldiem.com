@@ -10,7 +10,7 @@ on:
         required: true
 
 concurrency:
-  group: Deploy-refs/heads/master
+  group: Deploy-refs/heads/main
   cancel-in-progress: false
 
 jobs:

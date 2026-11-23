@@ -11,7 +11,7 @@ One line per item. Sections: **Decide** needs Gabriel's answer, **Later** is pla
 
 ## Later
 
-- [ ] **Go live** (infra, S): run `deploy/first-deploy-wizard.sh`, then merge. Done when a push to master reaches https://gabrieldiem.com. _Added 2026-11-01_
+- [ ] **Go live** (infra, S): run `deploy/first-deploy-wizard.sh`, then merge. Done when a push to main reaches https://gabrieldiem.com. _Added 2026-11-01_
 - [ ] **Spanish version** (web, L): a rotary EN/ES switch on the board. GYMBROS has the pattern (`en.ts`, `es.ts`, `t()`), and `src/content/` keeps the copy ready to move. _Added 2026-11-01_
 - [ ] **Prerender the page** (web, M): crawlers and no-JS visitors only get the noscript summary. Render the content into `index.html` at build time. _Added 2026-11-01_
 - [ ] **Link preview image** (web, S): add `og:image`, a shot of the lit name on the panel. _Added 2026-11-01_

@@ -411,7 +411,7 @@ done
 pause "Press Enter to finish"
 
 finish
-say "Next: merge the deploy branch. Every push to master then tests, builds, scans, smoke-tests and"
+say "Next: merge the deploy branch. Every push to main then tests, builds, scans, smoke-tests and"
 say "deploys, and rolls back by itself if the live check fails."
 say "Revoke any token you made and didn't use, in Portainer → My account → Access tokens."
 printf '\n'

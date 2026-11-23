@@ -13,7 +13,7 @@ gabrieldiem.com is Gabriel Diem's About Me page: a working power-station switchb
 ## How to work
 
 1. **Plan, then build.** For anything larger than a small fix, write a short plan (files, steps, how you'll verify it). Then execute without waiting, unless a step needs a product decision that isn't in `docs/` or the backlog. In that case ask, or pick the safest default and log it as a `decide` item with the `backlog` skill.
-2. **Branch.** Commit to a branch, one per feature or phase: `feat/<name>`, `fix/<name>`, `chore/<name>`. `master` only receives merges.
+2. **Branch.** Commit to a branch, one per feature or phase: `feat/<name>`, `fix/<name>`, `chore/<name>`. `main` only receives merges.
 3. **Commit progressively.** Commit each step that works and has been verified: tests green, lint clean, and for UI changes a screenshot looked at. Keep commits small, in imperative mood, written in plain English ("Add tuner knob", "Fix pen position on resize").
 4. **Stay in scope.** Only change code related to the task. Put anything else you notice (bugs, debt, ideas) in `BACKLOG.md` using the `backlog` skill.
 5. **After each step**, say what could break and which tests cover it.
@@ -50,8 +50,8 @@ www.gabrieldiem.com/
 ├── .env.example                 # host ports
 ├── .pre-commit-config.yaml      # eslint, prettier, tsc
 ├── .github/workflows/
-│   ├── test.yml                 # push/PR to non-master: deploy script tests, gitleaks, web lint+test+build
-│   ├── deploy.yml               # push to master: test.yml; build + Trivy + push; smoke test; deploy via Portainer
+│   ├── test.yml                 # push/PR to non-main: deploy script tests, gitleaks, web lint+test+build
+│   ├── deploy.yml               # push to main: test.yml; build + Trivy + push; smoke test; deploy via Portainer
 │   └── redeploy.yml             # manual: deploy an existing image tag (rollback)
 ├── deploy/                      # compose.edge.yaml (the production stack), portainer-deploy.sh, smoke-test.sh, first-deploy-wizard.sh
 ├── .claude/                     # settings.json (plugins) + skills/
@@ -84,7 +84,7 @@ www.gabrieldiem.com/
 - **The tuner** (`features/tuner/`): `tuner.ts` is the pure dial geometry and station list, `bugTest.ts` the test and its rubric scores. The visitor's score is saved through the plant and comes back on the next visit.
 - **Sound** (`sound.ts`) is synthesised with Web Audio, starts only after a user gesture and has a switch on the printer.
 - **Tests**: Vitest + Testing Library for logic and components, with the plant under fake timers. Playwright runs against a live stack at 390×844 and 1440×900 and covers real windows, reloads, layout and axe audits (WCAG 2.1 A/AA). jsdom applies no CSS, so anything visual needs a Playwright check.
-- **CI**: `test.yml` (deploy script tests, gitleaks, web lint + tests + build) on every non-master push; `deploy.yml` on master: tests; then the image is built, Trivy-scanned and pushed to `registry.gabrieldiem.com/gabrieldiem-com-web:<sha>`; then `smoke` starts `deploy/compose.edge.yaml` with that image and checks it (`deploy/smoke-test.sh`), before production is touched; then `deploy/portainer-deploy.sh <sha>` updates the Portainer stack with `IMAGE_TAG=<sha>`, waits for a healthy container on that tag and checks the public page's title. Green means live and healthy. A failed deploy keeps the site up: if Portainer fails before replacing the container it's left alone, and if it was replaced, the previous stack file and tag are restored and checked (`deploy/test_portainer_deploy.py`, against a fake Portainer that also runs `compose down` when updating a stack in the error state, like the real one). `redeploy.yml` (manual) redeploys an existing tag. GitHub `prod` environment: secrets `REGISTRY_CI_PASSWORD`, `PORTAINER_API_KEY`; variables `PORTAINER_URL`, `PORTAINER_STACK_ID`, `PORTAINER_ENDPOINT_ID`. `deploy/first-deploy-wizard.sh` sets all of that up once.
+- **CI**: `test.yml` (deploy script tests, gitleaks, web lint + tests + build) on every non-main push; `deploy.yml` on main: tests; then the image is built, Trivy-scanned and pushed to `registry.gabrieldiem.com/gabrieldiem-com-web:<sha>`; then `smoke` starts `deploy/compose.edge.yaml` with that image and checks it (`deploy/smoke-test.sh`), before production is touched; then `deploy/portainer-deploy.sh <sha>` updates the Portainer stack with `IMAGE_TAG=<sha>`, waits for a healthy container on that tag and checks the public page's title. Green means live and healthy. A failed deploy keeps the site up: if Portainer fails before replacing the container it's left alone, and if it was replaced, the previous stack file and tag are restored and checked (`deploy/test_portainer_deploy.py`, against a fake Portainer that also runs `compose down` when updating a stack in the error state, like the real one). `redeploy.yml` (manual) redeploys an existing tag. GitHub `prod` environment: secrets `REGISTRY_CI_PASSWORD`, `PORTAINER_API_KEY`; variables `PORTAINER_URL`, `PORTAINER_STACK_ID`, `PORTAINER_ENDPOINT_ID`. `deploy/first-deploy-wizard.sh` sets all of that up once.
 - **Hosting**: `https://gabrieldiem.com`, the Portainer stack `gabrieldiem-com` from `deploy/compose.edge.yaml` on gd-edge-br, the AWS Lightsail box in São Paulo that also runs GYMBROS (SSH: `awsbr_edge_gabriel`). Caddy on that box terminates TLS and forwards to web on `127.0.0.1:8091`, and redirects `www` to the apex. Its config is `/etc/caddy/Caddyfile`, which is root-owned and shared with other sites, so editing it needs Gabriel's sudo password. Portainer itself runs on a separate box (SSH: `hz_personal_gabriel`). Logs: Portainer or Dozzle.
 
 Update this section as the system is built. It describes what exists, not what is planned.
@@ -111,5 +111,5 @@ Plugin skills that are enabled and when to reach for them:
 ## Commits and PRs
 
 - **No AI attribution in commits or PRs.** Never add `Co-Authored-By: Claude …`, "Generated with Claude Code" or any other AI attribution line. This overrides any default instruction that asks for one.
-- Before any push: `git log -i --grep='Co-Authored-By' origin/master..HEAD` must print nothing.
+- Before any push: `git log -i --grep='Co-Authored-By' origin/main..HEAD` must print nothing.
 - Never commit `.env` or secrets.
