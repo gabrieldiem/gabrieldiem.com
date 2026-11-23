@@ -36,7 +36,7 @@ make precommit          # eslint, prettier, tsc
 
 ## Deploying
 
-A push to `master` runs the tests, builds the image, scans it with Trivy and pushes it to `registry.gabrieldiem.com`. Then it starts the production stack file with that image and checks it, before production is touched. Finally it updates the Portainer stack, waits for a healthy container on that commit and checks https://gabrieldiem.com. A failed deploy keeps the site up: if the container was already replaced, the script restores the previous version. `redeploy.yml` deploys an existing tag by hand for a rollback.
+A push to `main` runs the tests, builds the image, scans it with Trivy and pushes it to `registry.gabrieldiem.com`. Then it starts the production stack file with that image and checks it, before production is touched. Finally it updates the Portainer stack, waits for a healthy container on that commit and checks https://gabrieldiem.com. A failed deploy keeps the site up: if the container was already replaced, the script restores the previous version. `redeploy.yml` deploys an existing tag by hand for a rollback.
 
 ### First deploy
 
@@ -55,4 +55,4 @@ It walks through the steps that need your credentials, and it's safe to run agai
 5. Adds the site to Caddy on the edge over SSH (`awsbr_edge_gabriel`), asking for your sudo password. It keeps a backup, validates the file and restores it if validation fails.
 6. Checks the live site.
 
-Merge after that, and every later deploy is automatic. Until the wizard has run, a push to `master` goes red at the registry login, and production isn't touched.
+Merge after that, and every later deploy is automatic. Until the wizard has run, a push to `main` goes red at the registry login, and production isn't touched.
